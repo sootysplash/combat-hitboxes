@@ -26,16 +26,12 @@ import java.awt.*;
 
 @Mixin(EntityRenderDispatcher.class)
 public abstract class HitBoxRenderMixin {
-    @Unique private static double x, y, z;
     @Unique private static float tickDelta;
     @Unique private static MatrixStack matrices;
     @Unique private static Entity entity;
     @Unique private static VertexConsumerProvider verticeProvider;
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderer;render(Lnet/minecraft/entity/Entity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", shift = At.Shift.AFTER))
     private void captureArgs(Entity entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        HitBoxRenderMixin.x = x;
-        HitBoxRenderMixin.y = y;
-        HitBoxRenderMixin.z = z;
         HitBoxRenderMixin.tickDelta = tickDelta;
         HitBoxRenderMixin.matrices = matrices;
         HitBoxRenderMixin.entity = entity;
@@ -67,15 +63,6 @@ public abstract class HitBoxRenderMixin {
 
         Main.lineWidth = Main.mc.player != null && Main.mc.player.distanceTo(entity) > config.distFor2 ? config.line2 : config.line1;
 
-//        MatrixStack matstack = new MatrixStack();
-
-//        Camera cam = Main.mc.gameRenderer.getCamera();
-
-//        matstack.multiply((Main.next == null ? RotationAxis.NEGATIVE_X : RotationAxis.POSITIVE_X).rotationDegrees(cam.getPitch()));
-//        matstack.multiply((Main.next == null ? RotationAxis.NEGATIVE_Y : RotationAxis.POSITIVE_Y).rotationDegrees(cam.getYaw() + 180.0F));
-
-
-//        matstack.translate(x, y, z);
 
         VertexConsumerProvider.Immediate imm = Main.mc.getBufferBuilders().getEntityVertexConsumers();
 
@@ -131,9 +118,9 @@ public abstract class HitBoxRenderMixin {
             Vec3d vec3d2 = entity.getRotationVec(tickDelta);
             Matrix4f matrix4f = matrices.peek().getPositionMatrix();
             MatrixStack.Entry matrix3f = matrices.peek();
-            Main.normal(vertices.vertex(matrix4f, 0.0f, entity.getStandingEyeHeight(), 0.0f).color(lookDir.getRed(), lookDir.getGreen(), lookDir.getBlue(), lookDir.getAlpha()), matrix3f, (float) vec3d2.x, (float) vec3d2.y, (float) vec3d2.z);
-            Main.normal(vertices.vertex(matrix4f, (float) (vec3d2.x * 2.0), (float) ((double) entity.getStandingEyeHeight() + vec3d2.y * 2.0), (float) (vec3d2.z * 2.0)).color(lookDir.getRed(), lookDir.getGreen(), lookDir.getBlue(), lookDir.getAlpha()), matrix3f, (float) vec3d2.x, (float) vec3d2.y, (float) vec3d2.z);
 
+            vertices.vertex(matrix4f, 0.0f, entity.getStandingEyeHeight(), 0.0f).color(lookDir.getRed(), lookDir.getGreen(), lookDir.getBlue(), lookDir.getAlpha()).normal(matrix3f.getNormalMatrix(), (float) vec3d2.x, (float) vec3d2.y, (float) vec3d2.z).next();
+            vertices.vertex(matrix4f, (float) (vec3d2.x * 2.0), (float) ((double) entity.getStandingEyeHeight() + vec3d2.y * 2.0), (float) (vec3d2.z * 2.0)).color(lookDir.getRed(), lookDir.getGreen(), lookDir.getBlue(), lookDir.getAlpha()).normal(matrix3f.getNormalMatrix(), (float) vec3d2.x, (float) vec3d2.y, (float) vec3d2.z).next();
         }
     }
 
