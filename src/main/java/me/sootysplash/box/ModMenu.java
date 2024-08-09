@@ -106,7 +106,7 @@ public class ModMenu implements ModMenuApi {
                     .setMin(0)
                     .setMax(256)
                     .setDefaultValue(32)
-                    .setTooltip(Text.of("The width of the hitbox lines"))
+                    .setTooltip(Text.of("The distance for Line Width 2 to be used"))
                     .setSaveConsumer(newValue -> config.distFor2 = newValue)
                     .build());
 
