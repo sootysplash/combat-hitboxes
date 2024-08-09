@@ -119,8 +119,8 @@ public abstract class HitBoxRenderMixin {
             Matrix4f matrix4f = matrices.peek().getPositionMatrix();
             MatrixStack.Entry matrix3f = matrices.peek();
 
-            vertices.vertex(matrix4f, 0.0f, entity.getStandingEyeHeight(), 0.0f).color(lookDir.getRed(), lookDir.getGreen(), lookDir.getBlue(), lookDir.getAlpha()).normal(matrix3f.getNormalMatrix(), (float) vec3d2.x, (float) vec3d2.y, (float) vec3d2.z).next();
-            vertices.vertex(matrix4f, (float) (vec3d2.x * 2.0), (float) ((double) entity.getStandingEyeHeight() + vec3d2.y * 2.0), (float) (vec3d2.z * 2.0)).color(lookDir.getRed(), lookDir.getGreen(), lookDir.getBlue(), lookDir.getAlpha()).normal(matrix3f.getNormalMatrix(), (float) vec3d2.x, (float) vec3d2.y, (float) vec3d2.z).next();
+            vertices.vertex(matrix4f, 0.0f, entity.getStandingEyeHeight(), 0.0f).color(lookDir.getRed(), lookDir.getGreen(), lookDir.getBlue(), lookDir.getAlpha()).normal(matrix3f, (float) vec3d2.x, (float) vec3d2.y, (float) vec3d2.z);
+            vertices.vertex(matrix4f, (float) (vec3d2.x * 2.0), (float) ((double) entity.getStandingEyeHeight() + vec3d2.y * 2.0), (float) (vec3d2.z * 2.0)).color(lookDir.getRed(), lookDir.getGreen(), lookDir.getBlue(), lookDir.getAlpha()).normal(matrix3f, (float) vec3d2.x, (float) vec3d2.y, (float) vec3d2.z);
         }
     }
 
