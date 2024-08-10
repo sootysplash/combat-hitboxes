@@ -51,6 +51,12 @@ public class ModMenu implements ModMenuApi {
                     .setSaveConsumer(newValue -> config.hitBoxHurt = newValue)
                     .build());
 
+            behavior.addEntry(cfgent.startBooleanToggle(Text.of("Hide Stuck Arrows"), config.hideArrow)
+                    .setDefaultValue(false)
+                    .setTooltip(Text.of("Removes bee stingers and arrows visually from other players"))
+                    .setSaveConsumer(newValue -> config.hideArrow = newValue)
+                    .build());
+
 
 
             ConfigCategory colors = builder.getOrCreateCategory(Text.of("Colors"));
