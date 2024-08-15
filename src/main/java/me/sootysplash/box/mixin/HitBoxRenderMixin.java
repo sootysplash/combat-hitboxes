@@ -56,6 +56,7 @@ public abstract class HitBoxRenderMixin {
                     Color.WHITE,
                     Color.PINK,
                     false,
+                    false,
                     true,
                     true);
             return;
@@ -77,6 +78,7 @@ public abstract class HitBoxRenderMixin {
                 new Color(config.hitBoxColor, true),
                 new Color(config.targetBoxColor, true),
                 new Color(config.hurtBoxColor, true),
+                config.changeTargetColor,
                 config.hitBoxHurt,
                 config.renderEyeHeight,
                 config.renderLookDir);
@@ -93,10 +95,10 @@ public abstract class HitBoxRenderMixin {
 
     }
     @Unique
-    private static void renderBox(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, Color eyeHeight, Color lookDir, Color main, Color ifTarget, Color ifHurt, boolean hurtCol, boolean renderEyeHeight, boolean renderLookDir) {
+    private static void renderBox(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, Color eyeHeight, Color lookDir, Color main, Color ifTarget, Color ifHurt, boolean targetCol, boolean hurtCol, boolean renderEyeHeight, boolean renderLookDir) {
         Box box = entity.getBoundingBox().offset(-entity.getX(), -entity.getY(), -entity.getZ());
 
-        Color outer = entity instanceof LivingEntity le && le.hurtTime != 0 && hurtCol ? ifHurt : (Main.mc.crosshairTarget instanceof EntityHitResult ehr && ehr.getEntity() == entity ? ifTarget : main);
+        Color outer = targetCol && entity instanceof LivingEntity le && le.hurtTime != 0 && hurtCol ? ifHurt : (Main.mc.crosshairTarget instanceof EntityHitResult ehr && ehr.getEntity() == entity ? ifTarget : main);
         WorldRenderer.drawBox(matrices, vertices, box, outer.getRed() / 255f, outer.getGreen() / 255f, outer.getBlue() / 255f, outer.getAlpha() / 255f);
 
 
