@@ -51,6 +51,12 @@ public class ModMenu implements ModMenuApi {
                     .setSaveConsumer(newValue -> config.hitBoxHurt = newValue)
                     .build());
 
+            behavior.addEntry(cfgent.startBooleanToggle(Text.of("Target HitBox Color"), config.changeTargetColor)
+                    .setDefaultValue(true)
+                    .setTooltip(Text.of("Target hitbox color on targets?"))
+                    .setSaveConsumer(newValue -> config.changeTargetColor = newValue)
+                    .build());
+
             behavior.addEntry(cfgent.startBooleanToggle(Text.of("Hide Stuck Arrows"), config.hideArrow)
                     .setDefaultValue(false)
                     .setTooltip(Text.of("Removes bee stingers and arrows visually from other players"))

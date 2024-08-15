@@ -21,6 +21,7 @@ public class Config implements ConfigData {
 
     public boolean enabled = true;
     public boolean hideArrow = false;
+    public boolean changeTargetColor = true;
     public int eyeColor = Color.RED.getRGB();
     public int lookColor = Color.BLUE.getRGB();
     public int hitBoxColor = Color.WHITE.getRGB();
