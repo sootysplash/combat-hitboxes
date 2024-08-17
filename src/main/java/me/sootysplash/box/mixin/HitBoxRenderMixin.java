@@ -98,7 +98,7 @@ public abstract class HitBoxRenderMixin {
     private static void renderBox(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, Color eyeHeight, Color lookDir, Color main, Color ifTarget, Color ifHurt, boolean targetCol, boolean hurtCol, boolean renderEyeHeight, boolean renderLookDir) {
         Box box = entity.getBoundingBox().offset(-entity.getX(), -entity.getY(), -entity.getZ());
 
-        Color outer = targetCol && entity instanceof LivingEntity le && le.hurtTime != 0 && hurtCol ? ifHurt : (Main.mc.crosshairTarget instanceof EntityHitResult ehr && ehr.getEntity() == entity ? ifTarget : main);
+        Color outer = entity instanceof LivingEntity le && le.hurtTime != 0 && hurtCol ? ifHurt : (targetCol && Main.mc.crosshairTarget instanceof EntityHitResult ehr && ehr.getEntity() == entity ? ifTarget : main);
         WorldRenderer.drawBox(matrices, vertices, box, outer.getRed() / 255f, outer.getGreen() / 255f, outer.getBlue() / 255f, outer.getAlpha() / 255f);
 
 
