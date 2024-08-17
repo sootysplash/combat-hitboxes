@@ -45,17 +45,19 @@ public class ModMenu implements ModMenuApi {
                     .build());
 
 
+            behavior.addEntry(cfgent.startBooleanToggle(Text.of("Target HitBox Color"), config.changeTargetColor)
+                    .setDefaultValue(true)
+                    .setTooltip(Text.of("Target hitbox color on targets?"))
+                    .setSaveConsumer(newValue -> config.changeTargetColor = newValue)
+                    .build());
+
+
             behavior.addEntry(cfgent.startBooleanToggle(Text.of("HitBox Hurt"), config.hitBoxHurt)
                     .setDefaultValue(false)
                     .setTooltip(Text.of("Hitbox hurt color when hurt?"))
                     .setSaveConsumer(newValue -> config.hitBoxHurt = newValue)
                     .build());
 
-            behavior.addEntry(cfgent.startBooleanToggle(Text.of("Target HitBox Color"), config.changeTargetColor)
-                    .setDefaultValue(true)
-                    .setTooltip(Text.of("Target hitbox color on targets?"))
-                    .setSaveConsumer(newValue -> config.changeTargetColor = newValue)
-                    .build());
 
             behavior.addEntry(cfgent.startBooleanToggle(Text.of("Hide Stuck Arrows"), config.hideArrow)
                     .setDefaultValue(false)
@@ -78,7 +80,7 @@ public class ModMenu implements ModMenuApi {
             colors.addEntry(cfgent.startAlphaColorField(Text.of("Eye Color"), config.eyeColor)
                     .setDefaultValue(Color.RED.getRGB())
                     .setTooltip(Text.of("The hitbox eye height color"))
-                    .setSaveConsumer(newValue -> config.targetBoxColor = newValue)
+                    .setSaveConsumer(newValue -> config.eyeColor = newValue)
                     .build());
 
 
