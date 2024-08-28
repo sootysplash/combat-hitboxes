@@ -40,6 +40,10 @@ public abstract class HitBoxRenderMixin {
 
     @Inject(method = "renderHitbox", at = @At("HEAD"), cancellable = true)
     private static void hitBoxHook(CallbackInfo ci) {
+        // IMPORTANT!!!
+        // change mixin refmap to:
+        // "renderHitbox":"Lnet/minecraft/class_898;method_3956(Lnet/minecraft/class_4587;Lnet/minecraft/class_4588;Lnet/minecraft/class_1297;FFFF)V"
+        // since the auto generated one is incorrect >:(
         Config config = Config.getInstance();
         ci.cancel();
 
