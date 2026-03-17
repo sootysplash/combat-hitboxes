@@ -2,18 +2,18 @@ package me.sootysplash.box.mixin;
 
 import me.sootysplash.box.Config;
 import me.sootysplash.box.Main;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.debug.EntityHitboxDebugRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonPart;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.ColorHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.debug.gizmo.GizmoDrawing;
+import net.minecraft.client.renderer.debug.EntityHitboxDebugRenderer;
+import net.minecraft.gizmos.GizmoStyle;
+import net.minecraft.gizmos.Gizmos;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragonPart;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +26,7 @@ import java.awt.*;
 @Mixin(EntityHitboxDebugRenderer.class)
 public abstract class HitBoxRenderMixin {
 
-    @Inject(method = "drawHitbox", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "showHitboxes", at = @At("HEAD"), cancellable = true)
     private void onDrawHitbox(Entity entity, float tickProgress, boolean inLocalServer, CallbackInfo ci) {
         if (inLocalServer) {// they want to debug, let them
             return;
@@ -73,49 +73,49 @@ public abstract class HitBoxRenderMixin {
                                             boolean lineLookDir,
                                             boolean outlineEnabled,
                                             float outlineMultiplier) {
-        Vec3d vec3d = entity.getEntityPos();
-        Vec3d vec3d2 = entity.getLerpedPos(tickProgress);
-        Vec3d vec3d3 = vec3d2.subtract(vec3d);
-        Color outer = entity instanceof LivingEntity le && le.hurtTime != 0 && hurtCol ? ifHurt : (targetCol && Main.mc.crosshairTarget instanceof EntityHitResult ehr && ehr.getEntity() == entity ? ifTarget : main);
+        Vec3 vec3d = entity.position();
+        Vec3 vec3d2 = entity.getPosition(tickProgress);
+        Vec3 vec3d3 = vec3d2.subtract(vec3d);
+        Color outer = entity instanceof LivingEntity le && le.hurtTime != 0 && hurtCol ? ifHurt : (targetCol && Main.mc.hitResult instanceof EntityHitResult ehr && ehr.getEntity() == entity ? ifTarget : main);
         int i = outer.getRGB();
         if (outlineEnabled) {
-            GizmoDrawing.box(entity.getBoundingBox().offset(vec3d3), DrawStyle.stroked(outlineColor.getRGB(), lineWidth * outlineMultiplier));
+            Gizmos.cuboid(entity.getBoundingBox().move(vec3d3), GizmoStyle.stroke(outlineColor.getRGB(), lineWidth * outlineMultiplier));
         }
-        GizmoDrawing.box(entity.getBoundingBox().offset(vec3d3), DrawStyle.stroked(i, lineWidth));
-        GizmoDrawing.point(vec3d2, i, 2.0F);
+        Gizmos.cuboid(entity.getBoundingBox().move(vec3d3), GizmoStyle.stroke(i, lineWidth));
+        Gizmos.point(vec3d2, i, 2.0F);
         Entity entity2 = entity.getVehicle();
         if (entity2 != null) {
-            float f = Math.min(entity2.getWidth(), entity.getWidth()) / 2.0F;
+            float f = Math.min(entity2.getBbWidth(), entity.getBbWidth()) / 2.0F;
             float g = 0.0625F;
-            Vec3d vec3d4 = entity2.getPassengerRidingPos(entity).add(vec3d3);
-            GizmoDrawing.box(new Box(vec3d4.x - f, vec3d4.y, vec3d4.z - f, vec3d4.x + f, vec3d4.y + 0.0625, vec3d4.z + f), DrawStyle.stroked(-256, lineWidth));
+            Vec3 vec3d4 = entity2.getPassengerRidingPosition(entity).add(vec3d3);
+            Gizmos.cuboid(new AABB(vec3d4.x - f, vec3d4.y, vec3d4.z - f, vec3d4.x + f, vec3d4.y + g, vec3d4.z + f), GizmoStyle.stroke(-256, lineWidth));
         }
 
         if (entity instanceof LivingEntity && renderEyeHeight) {
-            Box box = entity.getBoundingBox().offset(vec3d3);
+            AABB box = entity.getBoundingBox().move(vec3d3);
             float g = 0.01F;
-            GizmoDrawing.box(
-                    new Box(box.minX, box.minY + entity.getStandingEyeHeight() - 0.01F, box.minZ, box.maxX, box.minY + entity.getStandingEyeHeight() + 0.01F, box.maxZ),
-                    DrawStyle.stroked(eyeHeight.getRGB(), lineWidth)
+            Gizmos.cuboid(
+                    new AABB(box.minX, box.minY + entity.getEyeHeight() - g, box.minZ, box.maxX, box.minY + entity.getEyeHeight() + g, box.maxZ),
+                    GizmoStyle.stroke(eyeHeight.getRGB(), lineWidth)
             );
         }
 
-        if (entity instanceof EnderDragonEntity enderDragonEntity) {
-            for (EnderDragonPart enderDragonPart : enderDragonEntity.getBodyParts()) {
-                Vec3d vec3d5 = enderDragonPart.getEntityPos();
-                Vec3d vec3d6 = enderDragonPart.getLerpedPos(tickProgress);
-                Vec3d vec3d7 = vec3d6.subtract(vec3d5);
-                GizmoDrawing.box(enderDragonPart.getBoundingBox().offset(vec3d7), DrawStyle.stroked(ColorHelper.fromFloats(1.0F, 0.25F, 1.0F, 0.0F)));
+        if (entity instanceof EnderDragon enderDragonEntity) {
+            for (EnderDragonPart enderDragonPart : enderDragonEntity.getSubEntities()) {
+                Vec3 vec3d5 = enderDragonPart.position();
+                Vec3 vec3d6 = enderDragonPart.getPosition(tickProgress);
+                Vec3 vec3d7 = vec3d6.subtract(vec3d5);
+                Gizmos.cuboid(enderDragonPart.getBoundingBox().move(vec3d7), GizmoStyle.stroke(ARGB.colorFromFloat(1.0F, 0.25F, 1.0F, 0.0F)));
             }
         }
 
-        Vec3d vec3d8 = vec3d2.add(0.0, entity.getStandingEyeHeight(), 0.0);
-        Vec3d vec3d9 = entity.getRotationVec(tickProgress);
+        Vec3 vec3d8 = vec3d2.add(0.0, entity.getEyeHeight(), 0.0);
+        Vec3 vec3d9 = entity.getViewVector(tickProgress);
         if (renderLookDir) {
             if (lineLookDir) {
-                GizmoDrawing.line(vec3d8, vec3d8.add(vec3d9.multiply(2.0)), lookDir.getRGB(), lineWidth);
+                Gizmos.line(vec3d8, vec3d8.add(vec3d9.scale(2.0)), lookDir.getRGB(), lineWidth);
             } else {
-                GizmoDrawing.arrow(vec3d8, vec3d8.add(vec3d9.multiply(2.0)), lookDir.getRGB(), lineWidth);
+                Gizmos.arrow(vec3d8, vec3d8.add(vec3d9.scale(2.0)), lookDir.getRGB(), lineWidth);
             }
         }
     }
