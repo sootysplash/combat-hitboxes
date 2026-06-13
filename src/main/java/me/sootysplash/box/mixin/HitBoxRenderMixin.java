@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragonPart;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -37,6 +38,9 @@ public abstract class HitBoxRenderMixin {
         }
         ci.cancel();
         if (config.hideFireworks && entity instanceof FireworkRocketEntity) {
+            return;
+        }
+        if (config.hideItems && entity instanceof ItemEntity) {
             return;
         }
 

@@ -57,6 +57,11 @@ public class ModMenu implements ModMenuApi {
                     .setSaveConsumer(newValue -> config.hitBoxHurt = newValue)
                     .build());
 
+            behavior.addEntry(cfgent.startBooleanToggle(Component.nullToEmpty("Line Look Direction"), config.lineLookDir)
+                    .setDefaultValue(true)
+                    .setTooltip(Component.nullToEmpty("Instead of the new arrow, draw the entity's look direction as a line"))
+                    .setSaveConsumer(newValue -> config.lineLookDir = newValue)
+                    .build());
 
             behavior.addEntry(cfgent.startBooleanToggle(Component.nullToEmpty("Hide Stuck Arrows"), config.hideArrow)
                     .setDefaultValue(false)
@@ -64,18 +69,17 @@ public class ModMenu implements ModMenuApi {
                     .setSaveConsumer(newValue -> config.hideArrow = newValue)
                     .build());
 
-            behavior.addEntry(cfgent.startBooleanToggle(Component.nullToEmpty("Hide Fireworks"), config.hideFireworks)
+            behavior.addEntry(cfgent.startBooleanToggle(Component.nullToEmpty("Skip Fireworks"), config.hideFireworks)
                     .setDefaultValue(false)
                     .setTooltip(Component.nullToEmpty("Skips rendering hitboxes for fireworks"))
                     .setSaveConsumer(newValue -> config.hideFireworks = newValue)
                     .build());
 
-            behavior.addEntry(cfgent.startBooleanToggle(Component.nullToEmpty("Line Look Direction"), config.lineLookDir)
-                    .setDefaultValue(true)
-                    .setTooltip(Component.nullToEmpty("Instead of the new arrow, draw the entity's look direction as a line"))
-                    .setSaveConsumer(newValue -> config.lineLookDir = newValue)
+            behavior.addEntry(cfgent.startBooleanToggle(Component.nullToEmpty("Skip Items"), config.hideItems)
+                    .setDefaultValue(false)
+                    .setTooltip(Component.nullToEmpty("Skips rendering hitboxes for dropped items"))
+                    .setSaveConsumer(newValue -> config.hideItems = newValue)
                     .build());
-
 
 
             ConfigCategory colors = builder.getOrCreateCategory(Component.nullToEmpty("Colors"));
