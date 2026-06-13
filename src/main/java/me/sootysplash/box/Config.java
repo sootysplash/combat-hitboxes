@@ -2,7 +2,6 @@ package me.sootysplash.box;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import me.shedaniel.autoconfig.ConfigData;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.awt.*;
@@ -10,8 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@me.shedaniel.autoconfig.annotation.Config(name = "combat-hitboxes")
-public class Config implements ConfigData {
+public class Config {
 
     //Andy is the goat https://github.com/AndyRusso/pvplegacyutils/blob/main/src/main/java/io/github/andyrusso/pvplegacyutils/PvPLegacyUtilsConfig.java
 
@@ -21,7 +19,8 @@ public class Config implements ConfigData {
 
     public boolean enabled = true;
     public boolean hideArrow = false;
-    public boolean hideFireworks = true;
+    public boolean hideFireworks = false;
+    public boolean hideItems = false;
     public boolean changeTargetColor = true;
     public int eyeColor = Color.RED.getRGB();
     public int lookColor = Color.BLUE.getRGB();

@@ -8,7 +8,7 @@
 		"Sootysplash"
 	],
 	"license": "Apache-2.0",
-	"icon": "assets/template-mod/icon.png",
+	"icon": "assets/combat-hitboxes/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
