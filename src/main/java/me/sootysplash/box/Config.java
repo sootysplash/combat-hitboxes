@@ -43,7 +43,7 @@ public class Config {
             Files.writeString(file, GSON.toJson(this));
         } catch (IOException e) {
             Main.LOGGER.error("CombatHitboxes could not save the config.");
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
     }
 
